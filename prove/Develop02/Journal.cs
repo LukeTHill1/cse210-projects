@@ -1,5 +1,4 @@
 using System.IO;
-
 namespace project1
 {
     public class Journal
