@@ -1,57 +1,99 @@
 using System;
-using System.Data;
-
+using project1;
 class Program
 {
-    static public Journal journal;
-
     static void Main(string[] args)
     {
-        journal = new Journal();
-        Console.WriteLine("");
-        Run();
-    }
-
-    static public string GetPrompt()
-    {
-        return "";
-    }
-
-    static public void Run()
-    {
-        bool keepGoing = true;
-        while(keepGoing)
+        List<string> _prompts = new List<string>
         {
-            var selection = ShowMenu();
-            if (selection == 1){
-                var prompt = "This was a random prompt";
-                var placeholderResponse = "This ";
-                var entry = new Entry(placeholderResponse, prompt);
-                journal.AddEntry(entry);
+            "Write anything that is on your mind"
+        };
 
-            } else if (selection == 2){
+        // Display menu function
+        int menu()
+        {
+            // Display options
+            Console.WriteLine();
+            Console.WriteLine("1. Write new entry");
+            Console.WriteLine("2. Display journal");
+            Console.WriteLine("3. Save journal");
+            Console.WriteLine("4. Load journal");
+            Console.WriteLine("If you want to quit, enter 0.");
+            Console.Write("Please choose a number: ");
+            int choice = int.Parse(Console.ReadLine());
 
+            // Validate user input (has to be between 0 and 4)
+            while (choice < 0 || choice > 4)
+            {
+                Console.WriteLine("Invalid choice. Please enter a number between 1 and 4.");
+                Console.Write("Please choose a number: ");
+                choice = int.Parse(Console.ReadLine());
             }
-            else if(selection == 5){
-                keepGoing = false;
-            }
+
+            // Return user input
+            return choice;
         }
 
-    }
-    static int ShowMenu()
-    {
-        Console.WriteLine("Select Option: \n 1. add Entry \n 2. Display Entries ");
-        string input = Console.ReadLine();
-        return int.Parse(input);
-    }
 
-    public void SaveToFile()
-    {
+        // Start of the program
+        Console.WriteLine("Welcome to the Journal app!");
 
-    }
+        // Initialize a journal object
+        Journal journal = new Journal();
 
-    public void LoadJournal()
-    {
+        // Display menu
+        int choice = menu();
 
+        // As long as user doesn't enter a 0, keep the program running
+        while(choice != 0)
+        {   
+
+            // Write entry
+            if (choice == 1)
+            {
+                Console.WriteLine();
+
+                // Generate random number between 0-4 to get a random prompt
+                Random rand = new Random();
+                int randInt = rand.Next(0, _prompts.Count); 
+                string randomPrompt = _prompts[randInt]; 
+
+                // Display prompt and record user's entry
+                Console.WriteLine(randomPrompt); 
+                string response = Console.ReadLine();
+
+                // Initialize an entry object and add it to the journal
+                Entry entry = new Entry(response);
+                entry.setPrompt(randomPrompt);
+                journal.addEntry(entry);
+            }
+
+            // Display journal 
+            else if (choice == 2)
+            {   
+                journal.Display();
+            }
+
+            // Save journal to file
+            else if(choice == 3)
+            {   
+                // Get the filename from the user and save the file
+                Console.Write("Please enter a filename (that ends with .txt): ");
+                string filename = Console.ReadLine();
+                journal.saveFile(filename);
+            }
+
+            // Read journal from file
+            else if(choice == 4)
+            {
+                // Get the filename from the user and read from that file
+                Console.Write("Provide the name of the file that contains the journal: ");
+                string filename = Console.ReadLine();
+                journal.readFile(filename);
+            }
+
+            // Display menu again
+            choice = menu();
+        }
     }
 }

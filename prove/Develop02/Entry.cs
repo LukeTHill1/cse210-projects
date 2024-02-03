@@ -1,28 +1,21 @@
-public class Entry
-{
-    public string response;
-    
-    public string prompt;
-
-    public string date;
-
-    public Entry(string prompt, string response)
+using System;
+    public class Entry
     {
-        this.response = response;
-        this.prompt = prompt;
-    }
-    public Entry(string import)
-    {
+        public string _prompt;
+        public string _reply;
+        public string _date;
+        public Entry(string _reply){
+            this._reply = _reply;
+            DateTime currentDateTime = DateTime.Now;
+            this._date = currentDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+        }
 
-    }
-    
+        public void setPrompt(string prompt)
+        {
+            _prompt = prompt;
+        }
 
-    public void Display(){
-
+        public String[] readEntry() {
+            return new String[] { _prompt, _reply };
+        }
     }
-
-    public string Export()
-    {
-        return "";
-    }
-}

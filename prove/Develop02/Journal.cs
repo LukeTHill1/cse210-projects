@@ -1,24 +1,55 @@
-public class Journal
+using System.IO;
+
+namespace project1
 {
-    public List<Entry> entries;
-    public Journal()
+    public class Journal
     {
 
-    }
-    public Journal(string import)
-    {
+        public List<Entry> _entries = new List<Entry>();
+        public String _fileName;
 
-    }
-    public void Display()
-    {
+        public void addEntry(Entry entry)
+        {
+            _entries.Add(entry);
+        }
 
-    }
-    public void AddEntry(Entry entry)
-    {
-        entries.Add(entry);
-    }
-    public string Export()
-    {
-        return "";
+        public void saveFile(string filename)
+        {
+            using (StreamWriter outputFile = new StreamWriter(filename))
+            {
+                foreach (Entry entry in _entries)
+                {
+                    string[] details = entry.readEntry();
+                    outputFile.WriteLine($"{details[1]}");
+                }
+            }
+            Console.WriteLine("File saved!");
+        }
+
+        public void readFile(string filename)
+        {
+            string[] lines = System.IO.File.ReadAllLines(filename);
+
+            foreach (string line in lines)
+            {
+                Entry entry = new Entry(line);
+                _entries.Add(entry);
+            }
+            Console.WriteLine("File read!");
+        }
+
+        public void Display()
+        {
+            int counter = 1;
+            Console.WriteLine("Journal Entries:");
+            foreach (Entry entry in _entries)
+            {
+                string[] entryDetails = entry.readEntry();
+                Console.Write($"{counter} - ");
+                Console.Write(entryDetails[1]);
+                Console.WriteLine();
+                counter++;
+            }
+        }
     }
 }
